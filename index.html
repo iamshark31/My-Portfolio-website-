@@ -5,10 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Portfolio</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="styles.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
+    <!-- Three.js Canvas -->
+    <canvas id="bg-animation" class="fixed top-0 left-0 w-full h-full -z-10"></canvas>
+
     <!-- Navigation -->
     <nav class="fixed w-full bg-white shadow-md z-50">
         <div class="container mx-auto px-6 py-4">
@@ -39,11 +43,11 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600">
-        <div class="text-center text-white">
-            <h1 class="text-5xl font-bold mb-4">Hi, I'm <span class="text-yellow-300">Your Name</span></h1>
-            <p class="text-2xl mb-8">Full Stack Developer</p>
-            <a href="#contact" class="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition duration-300">Get in Touch</a>
+    <section id="home" class="min-h-screen flex items-center justify-center">
+        <div class="text-center text-white relative z-10">
+            <h1 class="text-6xl font-bold mb-4 animate-fadeIn">Hi, I'm <span class="text-yellow-300">Your Name</span></h1>
+            <p class="text-3xl mb-8 animate-fadeIn animation-delay-200">Full Stack Developer</p>
+            <a href="#contact" class="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition duration-300 animate-fadeIn animation-delay-400">Get in Touch</a>
         </div>
     </section>
 
@@ -191,6 +195,7 @@
         </div>
     </footer>
 
+    <script src="three-background.js"></script>
     <script src="script.js"></script>
 </body>
 </html> 

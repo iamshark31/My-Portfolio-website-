@@ -32,6 +32,49 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
+// Section transitions
+const observerOptions = {
+    root: null,
+    threshold: 0.1,
+    rootMargin: '0px'
+};
+
+const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+
+        const section = entry.target;
+        section.classList.remove('section-hidden');
+        
+        // Add animation classes to children
+        section.querySelectorAll('.animate-on-scroll').forEach((element, index) => {
+            element.style.animationDelay = `${index * 200}ms`;
+            element.classList.add('animate-fadeIn');
+        });
+
+        // Stop observing after animation
+        observer.unobserve(section);
+    });
+}, observerOptions);
+
+// Observe all sections
+document.querySelectorAll('section').forEach(section => {
+    section.classList.add('section-hidden');
+    observer.observe(section);
+});
+
+// Skill icons animation
+document.querySelectorAll('.skill-icon').forEach((icon, index) => {
+    icon.style.animationDelay = `${index * 100}ms`;
+    icon.classList.add('animate-scaleIn');
+});
+
+// Project cards animation
+document.querySelectorAll('.project-card').forEach((card, index) => {
+    card.style.animationDelay = `${index * 200}ms`;
+    card.classList.add('animate-slideIn');
+});
+
 // Form submission handling
 const contactForm = document.getElementById('contact-form');
 
@@ -44,32 +87,36 @@ contactForm.addEventListener('submit', async (e) => {
         message: document.getElementById('message').value
     };
 
-    // Here you would typically send the form data to your backend
-    // For now, we'll just log it to the console
-    console.log('Form submitted:', formData);
-    
-    // Show success message
-    alert('Thank you for your message! I will get back to you soon.');
-    
-    // Clear form
-    contactForm.reset();
-});
-
-// Add animation classes to elements when they come into view
-const animateOnScroll = () => {
-    const elements = document.querySelectorAll('.skill-icon, .project-card');
-    
-    elements.forEach(element => {
-        const elementTop = element.getBoundingClientRect().top;
-        const elementBottom = element.getBoundingClientRect().bottom;
+    try {
+        // Here you would typically send the form data to your backend
+        console.log('Form submitted:', formData);
         
-        if (elementTop < window.innerHeight && elementBottom > 0) {
-            element.classList.add('animate-fadeIn');
-        }
-    });
-};
-
-// Listen for scroll events
-window.addEventListener('scroll', animateOnScroll);
-// Initial check for elements in view
-animateOnScroll(); 
+        // Show success message with animation
+        const successMessage = document.createElement('div');
+        successMessage.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg animate-fadeIn';
+        successMessage.textContent = 'Thank you for your message! I will get back to you soon.';
+        document.body.appendChild(successMessage);
+        
+        // Remove success message after 5 seconds
+        setTimeout(() => {
+            successMessage.classList.add('animate-fadeOut');
+            setTimeout(() => successMessage.remove(), 1000);
+        }, 5000);
+        
+        // Clear form
+        contactForm.reset();
+    } catch (error) {
+        console.error('Error submitting form:', error);
+        // Show error message
+        const errorMessage = document.createElement('div');
+        errorMessage.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg animate-fadeIn';
+        errorMessage.textContent = 'There was an error sending your message. Please try again.';
+        document.body.appendChild(errorMessage);
+        
+        // Remove error message after 5 seconds
+        setTimeout(() => {
+            errorMessage.classList.add('animate-fadeOut');
+            setTimeout(() => errorMessage.remove(), 1000);
+        }, 5000);
+    }
+}); 
