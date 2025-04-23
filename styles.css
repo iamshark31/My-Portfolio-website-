@@ -167,4 +167,81 @@ section {
     .text-gray-800 {
         color: rgba(255, 255, 255, 0.9);
     }
+}
+
+/* Menu Particles */
+.menu-particle {
+    filter: blur(1px);
+    box-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
+}
+
+/* Enhanced Navigation Menu Hover Effects */
+.nav-link {
+    position: relative;
+    padding: 0.5rem 0;
+    transition: all 0.3s ease;
+}
+
+.nav-link::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(to right, #3b82f6, #8b5cf6);
+    transition: width 0.3s ease;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+}
+
+.nav-link:hover {
+    color: #3b82f6;
+    transform: translateY(-1px);
+}
+
+.nav-link:hover::before {
+    width: 100%;
+}
+
+.nav-link.active {
+    color: #3b82f6;
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+}
+
+.nav-link.active::before {
+    width: 100%;
+}
+
+/* Mobile Menu Item Hover */
+.mobile-nav-link {
+    position: relative;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.mobile-nav-link::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: linear-gradient(to right, rgba(59, 130, 246, 0.1), transparent);
+    transform: translateY(-50%);
+    transition: width 0.3s ease;
+}
+
+.mobile-nav-link:hover {
+    transform: translateX(10px);
+}
+
+.mobile-nav-link:hover::before {
+    width: 100%;
+}
+
+.mobile-nav-link.active {
+    color: #3b82f6;
+    background: rgba(59, 130, 246, 0.1);
 } 

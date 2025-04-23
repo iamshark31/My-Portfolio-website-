@@ -119,4 +119,109 @@ contactForm.addEventListener('submit', async (e) => {
             setTimeout(() => errorMessage.remove(), 1000);
         }, 5000);
     }
-}); 
+});
+
+// Active menu item handling
+const sections = document.querySelectorAll('section');
+const navLinks = document.querySelectorAll('.nav-link, .mobile-nav-link');
+
+// Update active menu item based on scroll position
+function updateActiveMenuItem() {
+    const scrollPosition = window.scrollY;
+
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        const sectionBottom = sectionTop + section.offsetHeight;
+        const sectionId = section.getAttribute('id');
+
+        if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('data-section') === sectionId) {
+                    link.classList.add('active');
+                }
+            });
+        }
+    });
+}
+
+// Listen for scroll events to update active menu item
+window.addEventListener('scroll', updateActiveMenuItem);
+// Initial check for active menu item
+updateActiveMenuItem();
+
+// Menu hover effect with particles
+const menuParticles = [];
+let isHoveringMenu = false;
+let hoverX = 0;
+let hoverY = 0;
+
+navLinks.forEach(link => {
+    link.addEventListener('mouseenter', (e) => {
+        isHoveringMenu = true;
+        const rect = link.getBoundingClientRect();
+        hoverX = rect.left + rect.width / 2;
+        hoverY = rect.top + rect.height / 2;
+
+        // Create particle burst effect
+        for (let i = 0; i < 5; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'menu-particle';
+            particle.style.cssText = `
+                position: fixed;
+                width: 4px;
+                height: 4px;
+                background: #3b82f6;
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 100;
+                opacity: 0;
+                top: ${hoverY}px;
+                left: ${hoverX}px;
+                transform: translate(-50%, -50%);
+            `;
+            document.body.appendChild(particle);
+            
+            const angle = (Math.PI * 2 / 5) * i;
+            const velocity = 2;
+            const vx = Math.cos(angle) * velocity;
+            const vy = Math.sin(angle) * velocity;
+            
+            menuParticles.push({
+                element: particle,
+                vx,
+                vy,
+                life: 1
+            });
+        }
+    });
+
+    link.addEventListener('mouseleave', () => {
+        isHoveringMenu = false;
+    });
+});
+
+// Animate menu particles
+function animateMenuParticles() {
+    for (let i = menuParticles.length - 1; i >= 0; i--) {
+        const particle = menuParticles[i];
+        particle.life -= 0.02;
+        
+        if (particle.life <= 0) {
+            particle.element.remove();
+            menuParticles.splice(i, 1);
+            continue;
+        }
+        
+        const currentLeft = parseFloat(particle.element.style.left);
+        const currentTop = parseFloat(particle.element.style.top);
+        
+        particle.element.style.left = `${currentLeft + particle.vx}px`;
+        particle.element.style.top = `${currentTop + particle.vy}px`;
+        particle.element.style.opacity = particle.life;
+    }
+    
+    requestAnimationFrame(animateMenuParticles);
+}
+
+animateMenuParticles(); 
