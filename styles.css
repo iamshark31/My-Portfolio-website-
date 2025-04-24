@@ -66,6 +66,20 @@ html {
     }
 }
 
+/* Profile Image Animation */
+
+@keyframes profileImageFloat {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
 .animate-fadeIn {
     animation: fadeIn 1s ease-out forwards;
     opacity: 0;
@@ -79,6 +93,18 @@ html {
 .animate-slideIn {
     animation: slideInFromLeft 0.8s ease-out forwards;
     opacity: 0;
+}
+
+.profile-image {
+    animation: profileImageFloat 3s ease-in-out infinite;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 50%;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.profile-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
 }
 
 /* Animation Delays */

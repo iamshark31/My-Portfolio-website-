@@ -18,28 +18,29 @@ function init() {
 
     // Create particles
     const particlesGeometry = new THREE.BufferGeometry();
-    const particlesCount = 2000;
+    const particlesCount = 5000; // Increased particle count
     
     const posArray = new Float32Array(particlesCount * 3);
     const scaleArray = new Float32Array(particlesCount);
     
     for(let i = 0; i < particlesCount * 3; i++) {
-        posArray[i] = (Math.random() - 0.5) * 50;
+        posArray[i] = (Math.random() - 0.5) * 100; // Increased spread
         if(i % 3 === 0) {
-            scaleArray[i/3] = Math.random();
+            scaleArray[i/3] = Math.random() * 2; // Increased size variation
         }
     }
     
     particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
     particlesGeometry.setAttribute('scale', new THREE.BufferAttribute(scaleArray, 1));
     
-    // Create material
+    // Create material with improved visuals
     const particlesMaterial = new THREE.PointsMaterial({
-        size: 0.1,
+        size: 0.2, // Increased base size
         color: '#ffffff',
         transparent: true,
-        opacity: 0.8,
-        sizeAttenuation: true
+        opacity: 0.6,
+        sizeAttenuation: true,
+        blending: THREE.AdditiveBlending // Added for better visual effect
     });
     
     // Create particle system
@@ -47,7 +48,7 @@ function init() {
     scene.add(particles);
 
     // Add ambient light
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
     scene.add(ambientLight);
 }
 
@@ -55,14 +56,17 @@ function init() {
 function animate() {
     requestAnimationFrame(animate);
     
-    // Rotate particles
-    particles.rotation.x += 0.0003;
-    particles.rotation.y += 0.0005;
+    // Smoother rotation
+    particles.rotation.x += 0.0005;
+    particles.rotation.y += 0.0007;
     
-    // Mouse interaction
+    // Enhanced mouse interaction
     if(mouseX && mouseY) {
-        particles.rotation.x += (mouseY * 0.00001);
-        particles.rotation.y += (mouseX * 0.00001);
+        const targetRotationX = mouseY * 0.00005;
+        const targetRotationY = mouseX * 0.00005;
+        
+        particles.rotation.x += (targetRotationX - particles.rotation.x) * 0.05;
+        particles.rotation.y += (targetRotationY - particles.rotation.y) * 0.05;
     }
     
     renderer.render(scene, camera);
@@ -75,13 +79,21 @@ function onWindowResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-// Mouse movement tracking
+// Mouse movement tracking with smoothing
 let mouseX = 0;
 let mouseY = 0;
+let targetMouseX = 0;
+let targetMouseY = 0;
 
 function onMouseMove(event) {
-    mouseX = event.clientX - window.innerWidth / 2;
-    mouseY = event.clientY - window.innerHeight / 2;
+    targetMouseX = event.clientX - window.innerWidth / 2;
+    targetMouseY = event.clientY - window.innerHeight / 2;
+}
+
+// Smooth mouse movement
+function updateMousePosition() {
+    mouseX += (targetMouseX - mouseX) * 0.1;
+    mouseY += (targetMouseY - mouseY) * 0.1;
 }
 
 // Event listeners
